@@ -37,7 +37,6 @@ def summarize_business(metrics: Dict) -> Dict:
     }
 
     return summary
-
 def generate_executive_summary(summary: Dict) -> str:
     """
     Converts structured summary into executive-ready explanation.
@@ -66,20 +65,26 @@ Strategic review of discounting, cost structure, and customer segmentation is re
 def answer_business_question(question: str, metrics: Dict) -> str:
     """
     Deterministic business Q&A engine.
-    Routes question to appropriate metric.
+    Routes question to appropriate metric using intent clustering.
     """
 
-    question = question.lower()
-
+    q = question.lower().strip()
     summary = summarize_business(metrics)
 
-    if "health" in question:
+    # --- Health Intent ---
+    if any(word in q for word in ["health", "overall score", "business condition"]):
         return f"The overall business health score is {summary['health_score']}/100."
 
-    elif "margin" in question:
+    # --- Profit Margin Intent ---
+    elif any(word in q for word in ["margin", "profit margin"]):
         return f"The current profit margin is {summary['profit_margin_pct']}%."
 
-    elif "loss" in question and "category" in question:
+    # --- Loss Order Intent ---
+    elif any(word in q for word in ["loss order", "loss orders", "loss percentage", "how many loss"]):
+        return f"{summary['loss_order_pct']}% of total orders are loss-making."
+
+    # --- Risk Category Intent ---
+    elif any(word in q for word in ["highest risk", "risk category", "most risky"]):
         return (
             f"The category with highest structural inefficiency is "
             f"{summary['highest_risk_category']} "
@@ -87,9 +92,20 @@ def answer_business_question(question: str, metrics: Dict) -> str:
             f"loss-making orders."
         )
 
-    elif "risk" in question:
+    # --- Stability / Volatility Intent ---
+    elif any(word in q for word in ["stable", "stability", "volatility", "unstable"]):
+        worst = metrics["structural_inefficiency_by_category"].iloc[0]
+        return (
+            f"{worst['category']} shows {worst['stability']} behavior "
+            f"with an average loss ratio of {round(worst['avg_loss_ratio'] * 100, 2)}%."
+        )
+
+    # --- Risk Level Intent ---
+    elif "risk" in q:
         return f"Risk classification is: {summary['risk_level']}."
 
     else:
-        return "Question not recognized. Please ask about health, margin, risk, or loss categories."
-
+        return (
+            "Question not recognized. "
+            "You can ask about health, margin, loss orders, risk level, or stability."
+        )

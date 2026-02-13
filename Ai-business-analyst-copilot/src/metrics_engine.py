@@ -180,7 +180,12 @@ def profit_health_score(df: pd.DataFrame) -> dict:
     }
 
 
-def order_loss_consistency(df: pd.DataFrame, dimension: str, time_col: str = "year") -> pd.DataFrame:
+def order_loss_consistency(
+    df: pd.DataFrame,
+    dimension: str,
+    time_col: str = "year"
+) -> pd.DataFrame:
+
     df = normalize_columns(df)
 
     summary = (
@@ -192,14 +197,30 @@ def order_loss_consistency(df: pd.DataFrame, dimension: str, time_col: str = "ye
         .reset_index()
     )
 
-    summary["loss_order_ratio"] = summary["loss_orders"] / summary["total_orders"]
+    summary["loss_order_ratio"] = (
+        summary["loss_orders"] / summary["total_orders"]
+    )
 
     consistency = (
         summary.groupby(dimension)
         .agg(
-            avg_loss_ratio=("loss_order_ratio", "mean")
+            avg_loss_ratio=("loss_order_ratio", "mean"),
+            std_loss_ratio=("loss_order_ratio", "std"),
+            periods_analyzed=(time_col, "nunique")
         )
         .reset_index()
+    )
+
+    # Handle NaN std (happens if only 1 period exists)
+    consistency["std_loss_ratio"] = consistency["std_loss_ratio"].fillna(0)
+
+    # Stability classification
+    consistency["stability"] = consistency["std_loss_ratio"].apply(
+        lambda x: "Stable"
+        if x < 0.05
+        else "Moderate"
+        if x < 0.15
+        else "Unstable"
     )
 
     return consistency.sort_values("avg_loss_ratio", ascending=False)
