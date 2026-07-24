@@ -13,7 +13,7 @@ app = FastAPI(
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Restrict this in production
+    allow_origins=["*"],  # or your Streamlit domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

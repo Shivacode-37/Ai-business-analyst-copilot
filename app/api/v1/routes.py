@@ -1,5 +1,5 @@
 from io import StringIO
-
+import traceback
 import pandas as pd
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
@@ -73,7 +73,9 @@ async def analyze(file: UploadFile = File(...)):
         )
 
     except Exception as e:
+        traceback.print_exc()   # <-- Add this
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Analysis failed: {str(e)}",
-        )
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail=f"Analysis failed: {str(e)}",
+    )
+

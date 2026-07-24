@@ -25,16 +25,7 @@ class AnalysisService:
             df,
             mapping,
         )
-        print("\n=== DISCOUNT ANALYSIS ===")
-        print(metrics["discount_analysis"].columns)
-        print(metrics["discount_analysis"].head())
-        print("\n=== STRUCTURAL INEFFICIENCY ===")
-        print(metrics["structural_inefficiency_by_category"].columns)
-        print(metrics["structural_inefficiency_by_category"].head())
-
-        print("\n=== STRUCTURAL COLLAPSE ===")
-        print(metrics["structural_collapse_by_category"].columns)
-        print(metrics["structural_collapse_by_category"].head())
+        
 
         summary = summarize_business(metrics)
         executive_report = generate_executive_report(metrics)
