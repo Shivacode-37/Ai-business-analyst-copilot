@@ -1,3 +1,5 @@
+https://enterprise-ai-business-copilot-1.onrender.com/docs
+
 # 📊 Enterprise AI Business Copilot
 
 An AI-powered Business Intelligence platform that transforms raw business CSV data into executive-level insights, interactive dashboards, and AI-generated strategic recommendations.
@@ -8,9 +10,17 @@ Built with **FastAPI**, **Streamlit**, **Plotly**, and **Python**, this project 
 
 ## 🚀 Live Demo
 
-🔗 **Frontend:** http://localhost:8501/
+**🌐 Live Application**
+https://your-app-name.streamlit.app
 
-🔗 **Backend API:** http://127.0.0.1:8000/docs
+**⚡ FastAPI Backend**
+https://enterprise-ai-business-copilot-1.onrender.com
+
+**📖 API Documentation**
+https://enterprise-ai-business-copilot-1.onrender.com/docs
+
+💻 **GitHub Repository**
+https://github.com/Shivacode-37/enterprise-ai-business-copilot
 
 ---
 
@@ -36,7 +46,6 @@ Built with **FastAPI**, **Streamlit**, **Plotly**, and **Python**, this project 
 ---
 
 # ✨ Features
-
 
 ## 📂 CSV Upload
 

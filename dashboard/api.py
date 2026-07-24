@@ -1,6 +1,6 @@
 import requests
 
-API_URL = "http://127.0.0.1:8000/api/v1/analyze"
+API_URL = "https://enterprise-ai-business-copilot-1.onrender.com/api/v1/analyze"
 
 
 def analyze_csv(uploaded_file):
