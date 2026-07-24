@@ -14,12 +14,12 @@ def analyze_csv(uploaded_file):
 
     response = requests.post(API_URL, files=files)
 
-    if response.status_code != 200:
-       try:
-        error = response.json().get("detail", "Unknown error")
-       except Exception:
-        error = response.text
+    if response.ok:
+        return response.json()
 
-    raise Exception(error)
+    try:
+        detail = response.json().get("detail", "Unknown error")
+    except Exception:
+        detail = response.text
 
-    return response.json()
+    raise Exception(detail)
