@@ -11,7 +11,7 @@ Built with **FastAPI**, **Streamlit**, **Plotly**, and **Python**, this project 
 ## 🚀 Live Demo
 
 **🌐 Live Application**
-https://your-app-name.streamlit.app
+https://enterprise-ai-business-copilot.streamlit.app/
 
 **⚡ FastAPI Backend**
 https://enterprise-ai-business-copilot-1.onrender.com
