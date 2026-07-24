@@ -5,9 +5,13 @@ pydantic
 pydantic-settings
 pandas
 streamlit
-plotly
 matplotlib
+plotly
+
+langchain-openai
+langchain-community
+langchain-huggingface
+langchain-chroma
+
 python-multipart
 requests
-langchain
-
