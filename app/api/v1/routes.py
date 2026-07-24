@@ -63,11 +63,14 @@ async def analyze(file: UploadFile = File(...)):
         raise
 
     except ValueError as e:
-        # Raised when required business columns are missing
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail={
+            "error": "Unsupported Dataset",
+            "message": str(e),
+            "supported_dataset": "Business sales datasets containing Sales, Profit, Category, Region and Order Date columns."
+        },
+    )
 
     except pd.errors.ParserError:
         raise HTTPException(
