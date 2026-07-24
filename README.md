@@ -6,6 +6,8 @@ An AI-powered Business Intelligence platform that transforms raw business CSV da
 
 Built with **FastAPI**, **Streamlit**, **Plotly**, and **Python**, this project demonstrates an end-to-end AI application combining backend engineering, business analytics, and modern dashboard development.
 
+**Supported datasets:** Business sales data with columns such as Sales, Profit, Category, Region, and Order Date.
+
 ---
 
 ## 🚀 Live Demo

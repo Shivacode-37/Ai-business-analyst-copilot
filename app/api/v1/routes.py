@@ -1,5 +1,6 @@
 from io import StringIO
 import traceback
+
 import pandas as pd
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
@@ -7,8 +8,6 @@ from app.core.config import settings
 from app.schema.response import AnalysisResponse
 from app.services.analysis_service import AnalysisService
 from app.utils.json_utils import make_json_serializable
-
-
 
 router = APIRouter()
 
@@ -40,6 +39,7 @@ async def analyze(file: UploadFile = File(...)):
         contents = await file.read()
         df = pd.read_csv(StringIO(contents.decode("utf-8")))
 
+        # Validate empty file
         if df.empty:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -48,17 +48,26 @@ async def analyze(file: UploadFile = File(...)):
 
         # Run analysis
         result = AnalysisService.analyze(df)
+
+        # Convert NumPy/Pandas objects into JSON serializable objects
         result = make_json_serializable(result)
 
         return AnalysisResponse(
-    status="success",
-    summary=result["summary"],
-    executive_report=result["executive_report"],
-    metrics=result["metrics"],
-)
+            status="success",
+            summary=result["summary"],
+            executive_report=result["executive_report"],
+            metrics=result["metrics"],
+        )
 
     except HTTPException:
         raise
+
+    except ValueError as e:
+        # Raised when required business columns are missing
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
 
     except pd.errors.ParserError:
         raise HTTPException(
@@ -73,9 +82,10 @@ async def analyze(file: UploadFile = File(...)):
         )
 
     except Exception as e:
-        traceback.print_exc()   # <-- Add this
-        raise HTTPException(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        detail=f"Analysis failed: {str(e)}",
-    )
+        # Print complete traceback in Render logs
+        traceback.print_exc()
 
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Analysis failed: {str(e)}",
+        )
