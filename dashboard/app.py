@@ -139,9 +139,7 @@ if uploaded_file:
                 display_analysis_time(elapsed_time)
 
             except Exception as e:
-
-                st.error(f"❌ Analysis Failed\n\n{e}")
-
+                st.error(str(e))
 # ----------------------------------------------------
 # Footer
 # ----------------------------------------------------
